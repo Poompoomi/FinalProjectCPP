@@ -5,6 +5,7 @@
 #include <cstring>
 #include <stdlib.h>
 #include <iomanip>
+#include <algorithm> //for sorting algorithm
 
 #include "Bank.h"
 
@@ -75,6 +76,9 @@ void BankAccount::print()
     cout.setf(ios::fixed);
     cout.precision(2);
     cout << accountId << "\t\t\t" << type << "\t" << updateDate << "\t\t" << balance;
+    if (isSavingsAccount() || isCheckingAccount()){
+         cout << endl;
+    }
 }
 
 //******************************************************************
@@ -190,14 +194,6 @@ inline void Transaction::setAmount(double amountTr)
 void sortAccounts(BankAccount ** list)
 {
 
-
-
-
-
-
-
-
-
 }
 
 //******************************************************************
@@ -234,22 +230,23 @@ BankAccount ** readAccounts()
     inputFile.getline(nameRead, 60);
 	 
     while (inputFile && (counter < K_SizeMax - 1)){
+
         // YOU HAVE TO DO SOMETHING FROM HERE !!!
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
+          if (inputFile.eof()){ //checks if this is the last bank account
+               break;
+          }
+          switch (TypeRead){ //checks the type to properly initiate the account
+               case 1:
+               case 2:
+                    pAccount[0] = new BankAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead);               
+                    break;
+               case 3:
+                    pAccount[0] = new DepositAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead);               
+                    break;
+               case 4:
+                    pAccount[0] = new LoanAccount(accountRead, TypeRead, nameRead, dateRead, balanceRead, nbyearRead, RateRead);               
+                    break;
+          }
         // UNTIL THIS POINT.
 
           inputFile >> accountRead >> TypeRead >> dateRead >> balanceRead >> nbyearRead >> RateRead;
@@ -392,16 +389,17 @@ void displayAccounts(BankAccount ** listAccounts)
     cout << "                       ------------------------------------------" << endl << endl;
 	
     int i = 0;
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
+     //STUDENT INPUT REQUIRED
+     BankAccount ** pAccount = listAccounts;
+     for (int i = 0; i <K_SizeMax; i++){
+          if (pAccount[0]->getType() == 0){
+               break;
+          }
+          pAccount[0]->print();
+          pAccount++;
+     }
+     //STUDENT INPUT FINISHED
 }
 
 
@@ -410,9 +408,9 @@ void displayAccounts(BankAccount ** listAccounts)
 int main()
 {
     BankAccount ** list = readAccounts();
-    sortAccounts(list);
+    //sortAccounts(list);
     displayAccounts(list);
-    updateAccounts(list);
+    //updateAccounts(list);
     cout << endl << endl;
     cout << "               ************************************************" << endl;
     cout << "               * RE-DISPLAY OF DATA AFTER THE UPDATE *" << endl;

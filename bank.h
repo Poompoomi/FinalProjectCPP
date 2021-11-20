@@ -59,13 +59,13 @@ class BankAccount
 		 if(type == 01) 
 			 return TRUE;
 		else
-			false;
+			return FALSE; //gave me warning while compiling
 	 }
      Bool isSavingsAccount() const {
 		 if(type == 02) 
 			 return TRUE;
 		 else
-			 false;
+			return FALSE; //gave me warning while compiling
 	 }
 
      virtual Bool isDepositAccount() const {return FALSE;}
