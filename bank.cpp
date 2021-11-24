@@ -447,9 +447,6 @@ void displayAccounts(BankAccount ** listAccounts)
      //STUDENT INPUT FINISHED
 }
 
-
-
-
 int main()
 {
     BankAccount ** list = readAccounts();
