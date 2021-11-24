@@ -179,8 +179,11 @@ inline void Transaction::setAmount(double amountTr)
      amount = amountTr;
 }
 
-
-
+//small function made to compare bank accounts for sorting
+bool compareBankAcc(BankAccount* bank1, BankAccount* bank2){
+     cout << "Comparing " << bank1->getAccountId() << " with " << bank2->getAccountId() << endl;
+     return bank1->getAccountId() < bank2->getAccountId();
+}
 
 //****************************************************************************
 // Purpose: Sort a list of bank accounts in ascending order of ids and types.
@@ -191,9 +194,17 @@ inline void Transaction::setAmount(double amountTr)
 // Inputs: listAccount(BankAccount *), a list of bank accounts.
 // Outputs: listAccount(BankAccount *), sorted list of bank accounts.
 //****************************************************************************
+
 void sortAccounts(BankAccount ** list)
 {
-
+     int i = 0;
+     for (; i <K_SizeMax; i++){
+          if (list[i]->getType() == 0){
+               break;
+          }
+     } //i is now my last position
+     cout << "this is the last element: "<< i << endl;
+     sort(list, list + i, compareBankAcc); //uses sort syntax
 }
 
 //******************************************************************
@@ -360,16 +371,50 @@ void LoanAccount::executeTransaction(const Transaction trans)
 void updateAccounts(BankAccount ** listAccounts) {
      ifstream inputFile("transact.txt");	// Opening the input file
 
+     if (!inputFile)            		// If the file is not found...
+    {
+        cout << "File not found !!!" << endl;
+        exit(0);
+    }
 	 
+    long accountRead, dateRead;
+    int TypeRead, codeRead;
+    double amountRead;
 	 
+    inputFile >> accountRead >> TypeRead >> dateRead >> codeRead >> amountRead;
 	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+    while (true){
+
+          if (inputFile.eof()){ //checks if this is the last bank account
+               break;
+          }
+          Transaction t = Transaction(accountRead, TypeRead, dateRead, codeRead, amountRead);
+          
+          BankAccount ** pAccount = listAccounts;
+          for (int i = 0; i <K_SizeMax; i++){
+               if (pAccount[0]->getType() == 0){
+                    break;
+               }
+               if (pAccount[0]->getAccountId() == accountRead && pAccount[0]->getType() == TypeRead){
+                    switch(codeRead){
+                         case 1:
+                              pAccount[0]->setBalance(pAccount[0]->getBalance()+amountRead);
+                              break;
+                         case 2: //fall-through
+                         case 3:
+                              pAccount[0]->setBalance(pAccount[0]->getBalance()-amountRead);
+                              break;
+                    }
+                    break;
+               }
+
+               pAccount++;
+          }
+          
+          inputFile >> accountRead >> TypeRead >> dateRead >> codeRead >> amountRead;
+     }
+     
+
 }
 
 //******************************************************************************
@@ -408,9 +453,9 @@ void displayAccounts(BankAccount ** listAccounts)
 int main()
 {
     BankAccount ** list = readAccounts();
-    //sortAccounts(list);
+    sortAccounts(list);
     displayAccounts(list);
-    //updateAccounts(list);
+    updateAccounts(list);
     cout << endl << endl;
     cout << "               ************************************************" << endl;
     cout << "               * RE-DISPLAY OF DATA AFTER THE UPDATE *" << endl;
