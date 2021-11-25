@@ -181,7 +181,7 @@ inline void Transaction::setAmount(double amountTr)
 
 //small function made to compare bank accounts for sorting
 bool compareBankAcc(BankAccount* bank1, BankAccount* bank2){
-     cout << "Comparing " << bank1->getAccountId() << " with " << bank2->getAccountId() << endl;
+     //cout << "Comparing " << bank1->getAccountId() << " with " << bank2->getAccountId() << endl;
      return bank1->getAccountId() < bank2->getAccountId();
 }
 
@@ -203,7 +203,7 @@ void sortAccounts(BankAccount ** list)
                break;
           }
      } //i is now my last position
-     cout << "this is the last element: "<< i << endl;
+     //cout << "this is the last element: "<< i << endl;
      sort(list, list + i, compareBankAcc); //uses sort syntax
 }
 
@@ -460,6 +460,7 @@ int main()
     displayAccounts(list);
     cout << endl;
 
-	system("PAUSE");
+	//system("PAUSE"); replacing PAUSE with sleep so that it works on all prompts
+     system("sleep 5");
 	return 0;
 }

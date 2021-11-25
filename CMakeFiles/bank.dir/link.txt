@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -Wl,--enable-auto-import CMakeFiles/bank.dir/bank.cpp.o -o bank.exe -Wl,--out-implib,libbank.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
